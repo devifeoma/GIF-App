@@ -3,3 +3,23 @@ p {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+.search {
+  display: flex;
+  justify-content: center;
+}
+
+.search input {
+  width: 50%;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.search button {
+  width: 10%;
+  margin-left: 3px;
+  background-color:  #0C1E7F;
+  border-radius: 4px;
+  border-style: none;
+  color: white;
+}
