@@ -21,10 +21,10 @@ function Search() {
         setLoading(false);
         setGifs(response.data.data);
       } catch (error) {
-        setLoading(false);
         setError(true);
-        // alert("Something went wrong")
+        setTimeout(() => setError(false), 4000);
       }
+      setLoading(false);
     }
 
     getGifs();
