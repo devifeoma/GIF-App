@@ -3,21 +3,25 @@ import axios from 'axios';
 
 function Search() {
   const [gifs, setGifs] = useState([]);
-  const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false)
 
-  const API_URL =
-    'https://api.giphy.com/v1/gifs/search?api_key=deokzgUjxm6QHQdp3H3aca1LSZcCpucc&q=sphinx&limit=25&offset=0&rating=Y&lang=en';
+  // const API_URL =
+  //   'https://api.giphy.com/v1/gifs/trending?api_key=deokzgUjxm6QHQdp3H3aca1LSZcCpucc&q=sphinx&limit=25&offset=0&rating=Y&lang=en';
 
   useEffect(() => {
-    // if (query.length > 0){
     const getGifs = async () => {
       setLoading(true);
       setError(false);
       try {
-        const response = await axios.get(API_URL);
+        // const response = await axios.get(API_URL,);
+        const response = await axios("https://api.giphy.com/v1/gifs/trending", {
+          params: {
+            api_key: "xigl86x2P0M0Qq5I3tzszvCKcvDpM9Yb",
+            limit: 20
+          }
+        });
         setLoading(false);
         setGifs(response.data.data);
       } catch (error) {
@@ -28,20 +32,31 @@ function Search() {
     }
 
     getGifs();
-  // }
+
   }, []);
 
   // Function for the search button
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     event.preventDefault();
-    // gifs.filter((gif) => {
-    //   if (query === '') {
-    //     return gif;
-    //   } else if (gif.title.toLowerCase().includes(query.toLowerCase())) {
-    //     return gif;
-    //   }
-    // })
-    console.log("Search Data:", query)
+    const searchResult = async () => {
+      setLoading(true);
+      setError(false);
+      try {
+        const response = await axios("https://api.giphy.com/v1/gifs/search", {
+          params: {
+            api_key: "xigl86x2P0M0Qq5I3tzszvCKcvDpM9Yb",
+            q: query,
+            limit: 20
+          }
+        });
+        setLoading(false);
+        setGifs(response.data.data);
+      } catch (error) {
+        setError(true);
+        setTimeout(() => setError(false), 4000);
+      }
+      setLoading(false);
+    }
   };
   
   // Function reponsible for displaying any error 
@@ -60,7 +75,7 @@ function Search() {
 
   return (
     <div>
-      {/* Search input div */}
+      <h1 className="search-text">Search GIF App</h1>
       <div className="search" >
         <input
           type="text"
@@ -83,7 +98,7 @@ function Search() {
             return (
               <div className="card" key={gif.id}>
                 <img src={downsized.url} width={200} height={200} />
-                {gif.title}
+                {/* {gif.title} */}
               </div>
             );
           })}

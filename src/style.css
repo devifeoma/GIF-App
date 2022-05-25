@@ -23,3 +23,17 @@ p {
   border-style: none;
   color: white;
 }
+
+.card-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+  width: 100%;
+  align-items: center;
+}
+
+.card {
+  flex: 0 1 14%;
+  margin: 3px;
+}
