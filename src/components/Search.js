@@ -6,77 +6,88 @@ function Search() {
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false)
 
   const API_URL =
     'https://api.giphy.com/v1/gifs/search?api_key=deokzgUjxm6QHQdp3H3aca1LSZcCpucc&q=sphinx&limit=25&offset=0&rating=Y&lang=en';
 
-    useEffect(() => {
-      const getGifs = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(API_URL);
-          setLoading(false);
-          setGifs(response.data.data);
-        } catch (error) {
-          setLoading(false);
-        }
-      };
+  useEffect(() => {
+    // if (query.length > 0){
+    const getGifs = async () => {
+      setLoading(true);
+      setError(false);
+      try {
+        const response = await axios.get(API_URL);
+        setLoading(false);
+        setGifs(response.data.data);
+      } catch (error) {
+        setLoading(false);
+        setError(true);
+        // alert("Something went wrong")
+      }
+    }
 
     getGifs();
+  // }
   }, []);
 
-  const handleSearchInput = async (event) => {
-    setQuery(event.target.value);
-  };
-
-  const handleSubmit = async (event) => {
+  // Function for the search button
+  const handleSearch = (event) => {
     event.preventDefault();
+    // gifs.filter((gif) => {
+    //   if (query === '') {
+    //     return gif;
+    //   } else if (gif.title.toLowerCase().includes(query.toLowerCase())) {
+    //     return gif;
+    //   }
+    // })
+    console.log("Search Data:", query)
   };
+  
+  // Function reponsible for displaying any error 
+  const errorAlert = () => {
+    if (error) {
+      return (
+        <div><p>Hello something went wrong</p></div>
+      )
+    }
+  }
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  // Tells a user that the Gif is loading
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <div className="search">
+      {/* Search input div */}
+      <div className="search" >
         <input
-          value={search}
-          onChange={handleSearchInput}
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)} 
           placeholder="Search for a gif"
         />
-        <button onClick={handleSubmit} type="submit">
+        <button type="submit" onClick={handleSearch}>
           Search
         </button>
       </div>
 
-      <ul>
-        {gifs
-        .filter((gif) => {
-          if (query === '') {
-            return gif;
-          } else if (
-            gif.title.toLowerCase().includes(query.toLowerCase())
-          ) {
-            return gif;
-          }
-        })
-        .map((gif) => {
+      {/* Display error message */}
+      {errorAlert()}
+
+      {/* Display the Gif after fetching it from the API */}
+      <div className="card-div">
+        {gifs.map((gif) => {
           const { downsized } = gif.images;
-          return (
-            <li>
-              <p>
+            return (
+              <div className="card" key={gif.id}>
+                <img src={downsized.url} width={200} height={200} />
                 {gif.title}
-                <img
-                  src={downsized.url}
-                  width={downsized.width}
-                  height={downsized.height}
-                />
-              </p>
-            </li>
-          );
-        })}
-      </ul>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }
