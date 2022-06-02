@@ -61,11 +61,12 @@ function Search() {
   
   // Function reponsible for displaying any error 
   const errorAlert = () => {
-    if (error) {
-      return (
-        <div><p>Hello something went wrong</p></div>
-      )
-    }
+    {error && <div><p>Hello something went wrong</p></div>}
+    // if (error) {
+    //   return (
+    //     <div><p>Hello something went wrong</p></div>
+    //   )
+    // }
   }
 
   // Tells a user that the Gif is loading
